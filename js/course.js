@@ -1,4 +1,7 @@
-import { mountTopView } from './topview.js';import { mountQuiz } from './quiz.js';import { mountPhoto } from './photo.js';
+import { mountTopView } from './topview.js';
+import { mountQuiz } from './quiz.js';
+import { mountPhoto } from './photo.js';
+import { mountLive } from './live.js';
 export const MODULES = [
     {
       id: 1,
