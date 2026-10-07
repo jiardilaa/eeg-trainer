@@ -1,4 +1,4 @@
-const CACHE = 'eeg-trainer-v1'; // súbelo a v2, v3... cada vez que publiques cambios
+const CACHE = 'eeg-trainer-v2'; // súbelo a v2, v3... cada vez que publiques cambios
 const FILES = [
   './', 'index.html', 'manifest.webmanifest',
   'css/app.css',
