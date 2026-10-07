@@ -44,3 +44,20 @@ label.btn { cursor: pointer; }
 .stage line, .stage ellipse { fill: none; stroke: #7cc4ff; stroke-width: 2; stroke-dasharray: 6 6; opacity: .8; }
 #zl { display: block; margin: .5rem 0; }
 #zl input { width: 70%; vertical-align: middle; }
+h3 { margin: 1.2rem 0 .3rem; }
+.refs { padding-left: 1.1rem; }
+.refs li { margin: .5rem 0; }
+.fld { margin: 1rem 0; }
+.fh { display: flex; justify-content: space-between; align-items: center; }
+.fh label { font-weight: 600; }
+.q { width: 1.7rem; height: 1.7rem; border-radius: 50%; border: 1px solid #666; background: none; color: #aaa; font: inherit; }
+.hint { color: #aab; font-size: .9rem; margin: .3rem 0; }
+.inp { display: flex; align-items: center; background: #1b1b1b; border: 1px solid #444; border-radius: 10px; padding: 0 .9rem; }
+.inp:focus-within { border-color: #7cc4ff; }
+.inp input { flex: 1; min-width: 0; padding: .9rem 0; font: inherit; font-size: 1.1rem; color: #eee; background: transparent; border: 0; outline: 0; }
+.inp span { color: #888; }
+.err { color: #ff8a80; min-height: 1.2rem; }
+svg .dist { fill: #ff6b6b; font-size: 13px; font-weight: 700; text-anchor: middle; }
+svg .lm { fill: #7cc4ff; font-size: 12px; font-weight: 700; text-anchor: middle; }
+svg .seg { fill: none; stroke: #7cc4ff; stroke-width: 2; opacity: .8; }
+svg .el.static { cursor: default; }

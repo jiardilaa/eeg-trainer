@@ -2,6 +2,7 @@ import { mountTopView } from './topview.js';
 import { mountQuiz } from './quiz.js';
 import { mountPhoto } from './photo.js';
 import { mountLive } from './live.js';
+import { mountMeasure } from './measure.js';
 export const MODULES = [
     {
       id: 1,
@@ -85,8 +86,16 @@ export const MODULES = [
           <div id="live"></div>
           <div id="photo"></div>`,
         mount: root => {
-          const photo = mountPhoto(root.querySelector('#photo'));
+            const photo = mountPhoto(root.querySelector('#photo'), { hideCapture: true });
           mountLive(root.querySelector('#live'), photo);
         },
+      },
+      {
+        id: 8,
+        title: 'Calculadora de distancias',
+        html: `
+          <p>Mide la cabeza con cinta flexible, escribe los tres valores y la app calcula la distancia entre electrodos vecinos del 10-20.</p>
+          <div id="measure"></div>`,
+        mount: root => mountMeasure(root.querySelector('#measure')),
       },
   ];

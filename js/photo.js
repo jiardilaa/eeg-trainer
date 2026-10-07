@@ -4,7 +4,7 @@ const VIEW_NAMES = { frontal: 'Frontal', izquierda: 'Lateral izq.', derecha: 'La
 const LM_TEXT = { N: 'el NASION', I: 'el INION', LPA: 'el preauricular IZQUIERDO (LPA)', RPA: 'el preauricular DERECHO (RPA)', V: 'el VÉRTICE (punto más alto de la cabeza)' };
 const MAX = 1000; // lado mayor de la imagen en memoria (px)
 
-export function mountPhoto(root) {
+export function mountPhoto(root, opts = {}) {
   root.innerHTML = `
     <div class="box"><b>Protocolo:</b> cámara a la altura de la cabeza, a 1,5–2 m, con zoom 2×. Cabello aplastado o con gorro, orejas y nasion visibles, cabeza recta.</div>
     <div class="views">${Object.entries(VIEW_NAMES).map(([k, n]) =>
@@ -23,6 +23,7 @@ export function mountPhoto(root) {
 
   const cv = root.querySelector('#cv'), ctx = cv.getContext('2d');
   const step = root.querySelector('#step');
+  if (opts.hideCapture) root.querySelector('#cam').closest('label').hidden = true;
   let view = 'frontal', bg = null, clicks = {}, over = {}, drag = null, res = null;
   const viewListeners = [];
 
