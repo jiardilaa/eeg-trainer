@@ -61,3 +61,15 @@ svg .dist { fill: #ff6b6b; font-size: 13px; font-weight: 700; text-anchor: middl
 svg .lm { fill: #7cc4ff; font-size: 12px; font-weight: 700; text-anchor: middle; }
 svg .seg { fill: none; stroke: #7cc4ff; stroke-width: 2; opacity: .8; }
 svg .el.static { cursor: default; }
+.drawer {
+       position: fixed; top: 0; left: 0; bottom: 0; width: 280px;
+       background: #111; color: #fff; z-index: 100;
+       overflow-y: auto; padding: 16px;
+       transform: translateX(0); transition: transform .2s;
+     }
+     .drawer.hidden { transform: translateX(-100%); }
+     .backdrop {
+       position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 90;
+     }
+     .backdrop.hidden, .drawer.hidden { display: none; }
+     .menu-item { display: block; width: 100%; text-align: left; margin: 4px 0; padding: 8px; }

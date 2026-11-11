@@ -1,60 +1,75 @@
-import { MODULES } from './course.js';
+import { MODULES, GROUPS } from './course.js';
 
 const view = document.getElementById('view');
-const title = document.getElementById('title');
+const titleEl = document.getElementById('title');
+const drawer = document.getElementById('drawer');
+const backdrop = document.getElementById('backdrop');
+const homeBtn = document.querySelector('.home');
 
-function home() {
-    title.textContent = 'EEG 10-20 Trainer';
-    view.innerHTML = '<h2>Micro curso</h2>' + MODULES.map(m =>
-      `<a class="card" href="#/m/${m.id}">${m.id}. ${m.title}</a>`).join('') +
-      '<a class="card" href="#/about">Acerca de esta app<small>Referencias, privacidad y límites</small></a>';
-  }
-
-function module(id) {
-  const i = MODULES.findIndex(m => m.id === id);
-  if (i < 0) return home();
-  const m = MODULES[i], prev = MODULES[i - 1], next = MODULES[i + 1];
-  title.textContent = `Módulo ${m.id}`;
-  view.innerHTML = `<h2>${m.title}</h2>${m.html}
-    <div class="nav">
-      <a class="btn ${prev ? '' : 'off'}" href="#/m/${prev ? prev.id : m.id}">← Anterior</a>
-      <a class="btn ${next ? '' : 'off'}" href="#/m/${next ? next.id : m.id}">Siguiente →</a>
-    </div>`;
-    if (m.mount) m.mount(view);
-  window.scrollTo(0, 0);
+function openDrawer() {
+  drawer.classList.remove('hidden');
+  backdrop.classList.remove('hidden');
+}
+function closeDrawer() {
+  drawer.classList.add('hidden');
+  backdrop.classList.add('hidden');
 }
 
-function about() {
-    title.textContent = 'Acerca de';
-    view.innerHTML = `
-      <h2>Acerca de esta app</h2>
-      <p>Micro curso para aprender a ubicar los electrodos del sistema 10-20 de EEG, con una práctica sobre fotos. <b>Uso educativo: no es un dispositivo médico ni sustituye la medición con cinta sobre el paciente.</b></p>
-      <h3>Privacidad</h3>
-      <p>No hay cuentas, servidor, analítica ni cookies. Las fotos y el video se procesan solo en tu dispositivo y la app no los guarda. Solo se descarga una imagen si pulsas "Descargar PNG".</p>
-      <h3>Límites</h3>
-      <p>La cabeza se modela como una esfera, así que las posiciones sobre la foto son aproximadas. Pueden variar con la inclinación de la cabeza, la distancia de la cámara y los puntos que marques.</p>
-      <h3>Referencias</h3>
-      <ul class="refs">
-        <li>Klem GH, Lüders HO, Jasper HH, Elger C. (1999). The ten-twenty electrode system of the International Federation. <i>Electroencephalogr Clin Neurophysiol Suppl</i>, 52, 3–6.</li>
-        <li>American Clinical Neurophysiology Society. Guideline 1: Minimum Technical Requirements for Performing Clinical EEG.</li>
-        <li>American Clinical Neurophysiology Society. Guideline 5: Guidelines for Standard Electrode Position Nomenclature.</li>
-        <li>Nuwer MR et al. (1998). IFCN guidelines for topographic and frequency analysis of EEGs and EPs. <i>Electroencephalogr Clin Neurophysiol</i>, 106(4), 259–261. (Contexto: reproducibilidad en EEG cuantitativo.)</li>
-      </ul>
-      <p><small>Consulta siempre la versión vigente de las guías ACNS.</small></p>
-      <p><small>Autor: COGNITEK/ UPN MTIAE</small></p>
-      <div class="nav"><a class="btn" href="#/">← Inicio</a></div>`;
-    window.scrollTo(0, 0);
-  }
+homeBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+  if (drawer.classList.contains('hidden')) openDrawer();
+  else closeDrawer();
+});
+backdrop.addEventListener('click', closeDrawer);
 
-  function route() {
-    if (location.hash === '#/about') return about();
-    const hit = location.hash.match(/^#\/m\/(\d+)$/);
-    hit ? module(Number(hit[1])) : home();
+function renderMenuInDrawer() {
+  drawer.innerHTML = `<h2>Contenido</h2>`;
+  function addGroup(group, container) {
+    const gEl = document.createElement('div');
+    gEl.className = 'group';
+    gEl.innerHTML = `<h3>${group.title}</h3>`;
+    container.appendChild(gEl);
+    if (group.modules) {
+      group.modules.forEach(mod => {
+        const btn = document.createElement('button');
+        btn.className = 'menu-item';
+        btn.textContent = mod.title;
+        btn.onclick = () => {
+          location.hash = `#/module/${mod.id}`;
+          closeDrawer();
+        };
+        gEl.appendChild(btn);
+      });
+    }
+    if (group.subgroups) group.subgroups.forEach(sub => addGroup(sub, gEl));
   }
-  
-  window.addEventListener('hashchange', route);
-  route();
-  
-  if ('serviceWorker' in navigator && location.protocol === 'https:') {
-    navigator.serviceWorker.register('sw.js').catch(() => {});
+  GROUPS.forEach(g => addGroup(g, drawer));
+}
+
+function renderModule(id) {
+  const mod = MODULES.find(m => String(m.id) === String(id));
+  if (!mod) { view.innerHTML = `<p>Elige un módulo del menú ☰</p>`; return; }
+  titleEl.textContent = mod.title;
+  view.innerHTML = '';
+  const el = document.createElement('section');
+  el.className = 'module';
+  el.innerHTML = `<h2>${mod.title}</h2>${mod.html || ''}`;
+  view.appendChild(el);
+  if (mod.mount) {
+    try { mod.mount(el); } catch (e) { console.error('Error en mount', mod.id, e); }
   }
+}
+
+function router() {
+  const hash = location.hash || '#/';
+  if (hash.startsWith('#/module/')) {
+    renderModule(hash.replace('#/module/', ''));
+  } else {
+    titleEl.textContent = 'EEG 10-20 Trainer';
+    view.innerHTML = `<p>Usa el menú ☰ arriba a la izquierda para abrir el contenido.</p>`;
+  }
+}
+
+renderMenuInDrawer();
+window.addEventListener('hashchange', router);
+router();

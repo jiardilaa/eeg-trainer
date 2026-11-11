@@ -99,3 +99,18 @@ export const MODULES = [
         mount: root => mountMeasure(root.querySelector('#measure')),
       },
   ];
+  export const GROUPS = [
+    { id: 1, title: 'Introducción', modules: [] },
+    { id: 2, title: 'Marco teórico', modules: [] },
+    { id: 3, title: 'Metodología de investigación', subgroups: [
+      { id: 3.1, title: 'Participantes', modules: [] },
+      { id: 3.2, title: 'EEG Trainer', modules: MODULES },
+      { id: 3.3, title: 'Software', modules: [] },
+      { id: 3.4, title: 'Timeline experimental', modules: [] }
+    ]},
+    { id: 4, title: 'Preprocesamiento', modules: [] },
+    { id: 5, title: 'Procesamiento', modules: [] },
+    { id: 6, title: 'Entrenamiento', modules: [] },
+    { id: 7, title: 'Test', modules: [] },
+    { id: 8, title: 'Resultados', modules: [] }
+  ];
